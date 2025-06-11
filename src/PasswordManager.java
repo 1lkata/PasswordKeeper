@@ -130,14 +130,15 @@ class PasswordManager {
     if (!file.exists()) {
         return false;
     }
-    
+
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
         String header = reader.readLine();
-        if (header == null || !header.equals("PasswordKeeperData")) {
+        if (header == null) {
             return false;
         }
         
-        return false;
+        String decryptedHeader = decrypt(header, inputPassword);
+        return decryptedHeader.equals("PasswordKeeperData\n");
     } catch (Exception e) {
         return false;
     }
