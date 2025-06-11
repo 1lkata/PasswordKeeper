@@ -120,12 +120,9 @@ public class PasswordKeeperGUI {
             try {
                 manager = new PasswordManager(inputPassword);
                 manager.loadFromFile();
-                if (manager.validateMasterPassword(inputPassword)) {
-                    loginDialog.dispose();
-                    initializeMainGUI();
-                } else {
-                    JOptionPane.showMessageDialog(loginDialog, "Incorrect master password.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                loginDialog.dispose();
+                initializeMainGUI();
+                
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(loginDialog, "Failed to load data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
