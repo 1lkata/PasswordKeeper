@@ -61,7 +61,7 @@ class PasswordManager {
 
     public void saveToFile() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            writer.write("PasswordKeeperData\n");//*
+            writer.write(encrypt("PasswordKeeperData\n",masterPassword);//*
             for (PasswordEntry entry : entries) {
                 String encryptedPassword = encrypt(entry.getPassword(), masterPassword);
                 writer.write(entry.getWebsite() + "," + entry.getUsername() + "," + encryptedPassword + "\n");
@@ -78,7 +78,7 @@ class PasswordManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String header = reader.readLine();
             //Check correctness of file with *
-            if (header == null || !header.equals("PasswordKeeperData")) {
+            if (header == null || !header.equals(encrypt("PasswordKeeperData",masterPassword))) {
                 throw new IOException("Invalid file format or corrupted data");
             }
             String line;
@@ -125,7 +125,21 @@ class PasswordManager {
     }
 
     // Validate master password (for login)
-    public boolean validateMasterPassword(String inputPassword) {
-        return this.masterPassword.equals(inputPassword);
+   public boolean validateMasterPassword(String inputPassword) {
+    File file = new File(FILE_PATH);
+    if (!file.exists()) {
+        return false;
     }
+    
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        String header = reader.readLine();
+        if (header == null || !header.equals("PasswordKeeperData")) {
+            return false;
+        }
+        
+        return false;
+    } catch (Exception e) {
+        return false;
+    }
+}
 }
