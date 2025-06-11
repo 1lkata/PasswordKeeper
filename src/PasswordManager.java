@@ -15,6 +15,10 @@ class PasswordManager {
         passwordMap = new HashMap<>();
     }
 
+    public static String getFilePath(){
+        return FILE_PATH;
+    }
+
     public void addEntry(PasswordEntry entry) {
         entries.add(entry);
         passwordMap.put(entry.getWebsite().toLowerCase(), entry);
