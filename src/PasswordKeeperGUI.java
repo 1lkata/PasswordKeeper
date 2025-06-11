@@ -114,8 +114,17 @@ public class PasswordKeeperGUI {
         addToGridBag(loginDialog, passwordInput, 1, 0, 1);
         addToGridBag(loginDialog, loginButton, 0, 1, 2);
         addToGridBag(loginDialog, signupButton, 0, 2, 2);
-
+        File file = new File(PasswordManager.getFilePath());
+        boolean fileExists = file.exists();
         loginButton.addActionListener(e -> {
+            if (inputPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(loginDialog, "Password cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!fileExists) {
+                JOptionPane.showMessageDialog(loginDialog, "No data file found. Please sign up.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             String inputPassword = new String(passwordInput.getPassword());
             try {
                 manager = new PasswordManager(inputPassword);
@@ -134,6 +143,18 @@ public class PasswordKeeperGUI {
                 JOptionPane.showMessageDialog(loginDialog, "Password cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            if (fileExists) {
+                int option = JOptionPane.showConfirmDialog(loginDialog,
+                        "Data file already exists. This will overwrite existing data. Continue?",
+                        "Warning",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+                if (option != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            
+            
             manager = new PasswordManager(inputPassword);
             try {
                 manager.saveToFile();
