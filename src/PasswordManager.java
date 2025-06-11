@@ -123,24 +123,4 @@ class PasswordManager {
         }
         return charPool;
     }
-
-    // Validate master password (for login)
-   public boolean validateMasterPassword(String inputPassword) {
-    File file = new File(FILE_PATH);
-    if (!file.exists()) {
-        return false;
-    }
-
-    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-        String header = reader.readLine();
-        if (header == null) {
-            return false;
-        }
-        
-        String decryptedHeader = decrypt(header, inputPassword);
-        return decryptedHeader.equals("PasswordKeeperData\n");
-    } catch (Exception e) {
-        return false;
-    }
-}
 }
